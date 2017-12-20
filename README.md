@@ -1,4 +1,4 @@
-# MFLICA: Framework for Inferring Leadership Dynamics of  Complex Movement  from Time Series
+# mFLICA: Framework for Inferring Leadership Dynamics of  Complex Movement  from Time Series
 
 Welcome to MFLICA framework sourcecode. 
 
