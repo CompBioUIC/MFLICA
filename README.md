@@ -1,6 +1,6 @@
 # mFLICA: Framework for Inferring Leadership Dynamics of  Complex Movement  from Time Series
 
-Welcome to mFLICA framework sourcecode. This framework will be presented at SIAM SDM'18.
+Welcome to the mFLICA framework sourcecode page. This framework will be presented at SIAM SDM'18.
 
 Please edit and run MFLICAmain.m 
 The description of varibles are in the comments of MFLICAmain.m  
