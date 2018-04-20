@@ -1,4 +1,4 @@
-% The Framework of Multiple-Faction Leadership in Coordinated Activity  Inference (MFLICA)
+% The Framework of Multiple-Faction Leadership Inference in Coordinated Activity (MFLICA)
 % This source code is intent to support ICDM 2017 blind review process
 % This is the main script of MFLICA for inferring multiple faction
 % intervals
