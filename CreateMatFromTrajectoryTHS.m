@@ -5,53 +5,43 @@ if (~exist('sigmaTHS','var') || isempty(sigmaTHS)),
     sigmaTHS=0.01;
 end
 damping=0.9;
-TrajectoryX = TrajectoryXY{1,1};
-TrajectoryY = TrajectoryXY{1,2};
 
-% TrajectoryX=TrajectoryX(:,1:303); For only testing
-% TrajectoryY=TrajectoryY(:,1:303); For only testing
-
-[M,N]=size(TrajectoryX);
-CorrMat =zeros (M,M,N);
-NetDVec= zeros(1,N);
-RankMat=zeros(M,N);
+[M,T]=size(TrajectoryXY{1,1});
+CorrMat =zeros (M,M,T);
+NetDVec= zeros(1,T);
+RankMat=zeros(M,T);
 CorrMatcurr=[];
-for i=1:timeShiftWin:N
+for t=1:timeShiftWin:T
     
-    if (i+traWin-1) >= N && i~=1
-        CorrMat(:,:,i:N)=repmat(CorrMatcurr,1,1,N-i+1);
-        NetDVec(i:N)=repmat(link_density(CorrMatcurr),1,N-i+1);
-        RankMat(:,i:N)=repmat(NetRanking(CorrMatcurr,damping),1,N-i+1);
+    if (t+traWin-1) >= T && t~=1
+        CorrMat(:,:,t:T)=repmat(CorrMatcurr,1,1,T-t+1);
+        NetDVec(t:T)=repmat(link_density(CorrMatcurr),1,T-t+1);
+        RankMat(:,t:T)=repmat(NetRanking(CorrMatcurr,damping),1,T-t+1);
         break;
     else
-        TraSegmentX = TrajectoryX(:,i:(i+traWin-1));
-        TraSegmentY = TrajectoryY(:,i:(i+traWin-1));
-        
         %--- Create corrMat 
-        CorrMatcurr= segment2Mat(TraSegmentX,TraSegmentY);
+        interval=t:(t+traWin-1); % current interval I
+        CorrMatcurr= segmentTr2FollNet(TrajectoryXY,interval); % create a following network
         CorrMatcurr(CorrMatcurr<sigmaTHS)=0;
-        %CorrMatcurr(CorrMatcurr>=sigmaTHS)=1;
+        CorrMat(:,:,t:t+timeShiftWin-1)=repmat(CorrMatcurr,1,1,timeShiftWin);
         %--- Create Link Density
-		CorrMat(:,:,i:i+timeShiftWin-1)=repmat(CorrMatcurr,1,1,timeShiftWin);
-        NetDVec(i:i+timeShiftWin-1)=repmat(link_density(CorrMatcurr),1,timeShiftWin);
-        RankMat(:,(i:i+timeShiftWin-1))=repmat(NetRanking(CorrMatcurr,damping),1,timeShiftWin);
-		
-		
+        NetDVec(t:t+timeShiftWin-1)=repmat(link_density(CorrMatcurr),1,timeShiftWin);
+        RankMat(:,(t:t+timeShiftWin-1))=repmat(NetRanking(CorrMatcurr,damping),1,timeShiftWin);
     end
-    i
+    t
 end
 
 end
 
-function CorrMatcurr= segment2Mat(TraSegmentX,TraSegmentY)
-N= size(TraSegmentX,1);
+function CorrMatcurr= segmentTr2FollNet(TrajectoryXY,interval)
+N= size(TrajectoryXY{1,1},1);
 CorrMatcurr=zeros(N,N);
 PairSet={};
 k=1;
 for i=1:N
-    tr1=[TraSegmentX(i,:);TraSegmentY(i,:)];
+    tr1=CvtTrajectoryXY2Segment(TrajectoryXY,interval,i);
     for j=i+1:N
-        tr2=[TraSegmentX(j,:);TraSegmentY(j,:)];
+        tr2=CvtTrajectoryXY2Segment(TrajectoryXY,interval,j);%[TraSegmentX(j,:);TraSegmentY(j,:)];
         PairSet{k}={tr1,tr2,i,j};
         k=k+1;
     end
@@ -73,6 +63,16 @@ for k=1:size(PairSet,2)
     elseif ~isnan(sg)
         CorrMatcurr(i,j)=abs(sg);
     end
+end
+
+end
+
+function tr=CvtTrajectoryXY2Segment(TrajectoryXY,interval,k)
+D= max(size(TrajectoryXY));
+T= max(size(interval));
+tr=zeros(D,T);
+for d=1:D
+    tr(d,:)=TrajectoryXY{1,d}(k,interval);
 end
 
 end
