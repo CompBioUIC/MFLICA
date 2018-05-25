@@ -1,7 +1,7 @@
 function [CorrMat,NetDVec,RankMat]= CreateMatFromTrajectoryTHS(TrajectoryXY,timeShiftWin,traWin,sigmaTHS)
 %CREATEMATFROMTRAJECTORY Summary of this function goes here
 %   Detailed explanation goes here
-if (~exist('sigmaTHS','var') || isempty(sigmaTHS)),
+if (~exist('sigmaTHS','var') || isempty(sigmaTHS))
     sigmaTHS=0.01;
 end
 damping=0.9;

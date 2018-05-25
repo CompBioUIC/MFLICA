@@ -29,9 +29,9 @@ DataOut.RankMat;
 % dyGroupDensityMat: the faction  size  ratio (EQ.3) where dyGroupDensityMat(i,t) is the faction  size  ratio of a faction leading by i at time t
 DataOut.dyGroupDensityMat;
 %dyLeaderMat: dyLeaderMat{t}(i) is an initiator of ith faction at time t
-DataOut.dyLeaderMat
+DataOut.dyLeaderMat;
 %dyGroupMat: dyGroupMat{t}{i} is a set of ID of ith faction at time t where  ismember(k,DataOut.dyGroupMat{t}{i}) is true if ID(k) is a member of ith faction at time t
-DataOut.dyGroupMat
+DataOut.dyGroupMat;
 % dyRankedIDMat: dyRankedIDMat{t}{i}(j) is a rank of individual ID(dyGroupMat{t}{i}(j)) who is a member of ith faction at time t 
 DataOut.dyRankedIDMat;
 
